@@ -1,6 +1,6 @@
 import openke
 from openke.config import Trainer, Tester
-from openke.module.model import SimplE
+from openke.module.model import QuantE
 from openke.module.loss import SoftplusLoss
 from openke.module.strategy import NegativeSampling
 from openke.data import TrainDataLoader, TestDataLoader
@@ -21,7 +21,7 @@ train_dataloader = TrainDataLoader(
 test_dataloader = TestDataLoader("./benchmarks/WN18RR/", "link")
 
 # define the model
-simple = SimplE(
+quantE = QuantE(
 	ent_tot = train_dataloader.get_ent_tot(),
 	rel_tot = train_dataloader.get_rel_tot(),
 	dim = 200
@@ -29,19 +29,18 @@ simple = SimplE(
 
 # define the loss function
 model = NegativeSampling(
-	model = simple, 
+	model = quantE, 
 	loss = SoftplusLoss(),
 	batch_size = train_dataloader.get_batch_size(), 
 	regul_rate = 1.0
 )
 
-
 # train the model
 trainer = Trainer(model = model, data_loader = train_dataloader, train_times = 2000, alpha = 0.5, use_gpu = True, opt_method = "adagrad")
 trainer.run()
-simple.save_checkpoint('./checkpoint/simple.ckpt')
+quantE.save_checkpoint('./checkpoint/quantE.ckpt')
 
 # test the model
-simple.load_checkpoint('./checkpoint/simple.ckpt')
-tester = Tester(model = simple, data_loader = test_dataloader, use_gpu = True)
+quantE.load_checkpoint('./checkpoint/quantE.ckpt')
+tester = Tester(model = quantE, data_loader = test_dataloader, use_gpu = True)
 tester.run_link_prediction(type_constrain = False)
