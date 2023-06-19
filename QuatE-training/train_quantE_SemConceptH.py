@@ -1,6 +1,6 @@
 import openke
 from openke.config import Trainer, Tester
-from openke.module.model import QuantE
+from openke.module.model.QuantE import QuantE
 from openke.module.loss import SoftplusLoss
 from openke.module.strategy import NegativeSampling
 from openke.data import TrainDataLoader, TestDataLoader
