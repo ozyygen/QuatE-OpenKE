@@ -24,7 +24,6 @@ test_dataloader = TestDataLoader("./benchmarks/WN18RR/", "link")
 quantE = QuantE(
 	ent_tot = train_dataloader.get_ent_tot(),
 	rel_tot = train_dataloader.get_rel_tot(),
-	meta_rel_tot = '',
 	dim = 200
 )
 
