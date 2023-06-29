@@ -9,10 +9,9 @@ from .Model import Model
 from numpy.random import RandomState
 
 class QuantE(Model):
-	def __init__(self, ent_tot, rel_tot, meta_rel_tot, dim=50, seed=123):
+	def __init__(self, ent_tot, rel_tot, dim=50, seed=123):
 		super(QuantE, self).__init__(ent_tot, rel_tot)
 
-		self.meta_rel_tot = meta_rel_tot
 		self.dim = dim
 		self.seed = seed
 
