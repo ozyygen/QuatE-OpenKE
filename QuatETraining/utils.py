@@ -25,7 +25,14 @@ def load_ttl_files(pathfilename):
 
 def has_hierarcy_associative_clash(df):
     violating_triples = []
+    negative_data = {
+        's': [],
+        'p': [],
+        'o': []
+    }
+    negative_df = pd.DataFrame(negative_data)
 
+    negative_df = []
     for _, row in df.iterrows():
         concept = row['s']
         relation = row['p']
@@ -42,7 +49,7 @@ def has_hierarcy_associative_clash(df):
                 violating_triples.append((concept, opposite_relation, related_concept))
 
     if violating_triples:
-        updated_kg, negative_df = remove_and_update_kg(df,violating_triples)
+        updated_kg, negative_df = remove_and_update_kg(df,negative_df,violating_triples)
   
     else:
       print("Hiearchy is consistent in terms of hierarcical & associative links clashes")
@@ -50,7 +57,7 @@ def has_hierarcy_associative_clash(df):
     return updated_kg, negative_df 
 
 
-def remove_and_update_kg(kg, violating_triples):
+def remove_and_update_kg(kg, negative_df, violating_triples):
   
     for violating_triple in violating_triples:
         kg = kg[~((kg['s'] == violating_triple['s']) &
