@@ -53,9 +53,9 @@ def has_hierarcy_associative_clash(df):
 def remove_and_update_kg(kg, violating_triples):
   
     for violating_triple in violating_triples:
-        kg = kg[~((kg['subject'] == violating_triple['subject']) &
-                  (kg['predicate'] == violating_triple['predicate']) &
-                  (kg['object'] == violating_triple['object']))].reset_index(drop=True)
+        kg = kg[~((kg['s'] == violating_triple['s']) &
+                  (kg['p'] == violating_triple['p']) &
+                  (kg['o'] == violating_triple['o']))].reset_index(drop=True)
 
 
         negative_df = negative_df.append(violating_triple, ignore_index=True)
