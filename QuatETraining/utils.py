@@ -58,21 +58,17 @@ def has_hierarcy_associative_clash(df):
 
 
 def remove_and_update_kg(kg, negative_df, violating_triples):
-  
     for violating_triple in violating_triples:
         kg = kg[~((kg['s'] == violating_triple['s']) &
                   (kg['p'] == violating_triple['p']) &
                   (kg['o'] == violating_triple['o']))].reset_index(drop=True)
-
 
         negative_df = negative_df.append(violating_triple, ignore_index=True)
 
     return kg, negative_df
 
 
-
 def split_dataset(df):
-  
     df_shuffled = df.sample(frac=1, random_state=42)
     
     total_samples = df_shuffled.shape[0]
@@ -85,6 +81,7 @@ def split_dataset(df):
     df_test = df_shuffled.iloc[train_size + valid_size:]
     
     return df_train, df_valid, df_test
+
 
 
 def convert_to_id_files(df):
