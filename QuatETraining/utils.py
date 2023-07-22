@@ -32,7 +32,6 @@ def has_hierarcy_associative_clash(df):
     }
     negative_df = pd.DataFrame(negative_data)
 
-    negative_df = []
     for _, row in df.iterrows():
         concept = row['s']
         relation = row['p']
