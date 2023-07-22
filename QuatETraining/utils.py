@@ -25,12 +25,7 @@ def load_ttl_files(pathfilename):
 
 def has_hierarcy_associative_clash(df):
     violating_triples = []
-    negative_data = {
-        's': [],
-        'p': [],
-        'o': []
-    }
-    negative_df = pd.DataFrame(negative_data)
+    negative_df = pd.DataFrame(columns=['s', 'p', 'o'])
 
     for _, row in df.iterrows():
         concept = row['s']
