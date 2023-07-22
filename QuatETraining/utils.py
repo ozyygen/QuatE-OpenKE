@@ -13,7 +13,7 @@ def load_ttl_files(pathfilename):
       if init_part == '\n' or init_part == '\t' or init_part == '@':
         continue
       else:
-        parts = line.split(' ')
+        parts = line.split('\t')
         entity_dict['s'].append(parts[0])
         entity_dict['p'].append(parts[1])
         entity_dict['o'].append(parts[2])
