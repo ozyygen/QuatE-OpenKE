@@ -1,24 +1,14 @@
 import numpy as np
 import pandas as pd
+from rdfpandas.graph import to_dataframe
+import pandas as pd
+import rdflib
 
 def load_ttl_files(pathfilename):
     
-    nt_file = open(pathfilename,'r')
-    lines   = nt_file.readlines()
-
-    entity_dict = dict({'s':[],'o':[],'p':[]})
-
-    for line in lines:
-      init_part = line[0]
-      if init_part == '\n' or init_part == '\t' or init_part == '@':
-        continue
-      else:
-        parts = line.split(' ')
-        entity_dict['s'].append(parts[0])
-        entity_dict['p'].append(parts[1])
-        entity_dict['o'].append(parts[2])
-
-    df = pd.DataFrame(entity_dict)
+    g = rdflib.Graph()
+    g.parse(pathfilename, format = 'ttl')
+    df = to_dataframe(g)
 
     return df
 
