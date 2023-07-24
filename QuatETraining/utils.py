@@ -10,7 +10,8 @@ def load_ttl_files(pathfilename):
     g.parse(pathfilename, format = 'ttl')
     for s, p, o in g:
       tmp.append((s, p, o))
-    df = pd.concat(tmp)       
+    df = pd.DataFrame(tmp, columns=['s', 'p', 'o'])
+ 
     return df
 
 
