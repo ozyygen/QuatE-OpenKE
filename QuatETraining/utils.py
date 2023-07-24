@@ -4,12 +4,13 @@ import pandas as pd
 import rdflib
 
 def load_ttl_files(pathfilename):
+    tmp = []
     df = pd.DataFrame(columns=['s', 'p', 'o'])
     g = rdflib.Graph()
     g.parse(pathfilename, format = 'ttl')
     for s, p, o in g:
-      df.append((s, p, o))
-
+      tmp.append((s, p, o))
+    df = pd.concat(tmp)       
     return df
 
 
