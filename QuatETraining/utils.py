@@ -26,7 +26,7 @@ def has_hierarcy_associative_clash(df):
         other_concept = row['o']
 
         if relation == "http://www.w3.org/2004/02/skos/core#related" :
-            if df[(df['s'] == other_concept) & (df['p'] == "http://www.w3.org/2004/02/skos/core#broader" ) & (df['o'] == concept)].shape[0] > 0:
+            if df[(df['s'] == other_concept) & (df['p'] == "http://www.w3.org/2004/02/skos/core#broader" ) & (df['o'] == concept)]:
                 violating_triples.append((concept, relation, other_concept))
                 violating_triples.append((other_concept, "http://www.w3.org/2004/02/skos/core#broader", concept))
 
