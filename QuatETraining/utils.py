@@ -1,6 +1,5 @@
 import numpy as np
 import pandas as pd
-from rdfpandas.graph import to_dataframe
 import pandas as pd
 import rdflib
 
@@ -8,7 +7,8 @@ def load_ttl_files(pathfilename):
     df = pd.DataFrame(columns=['s', 'p', 'o'])
     g = rdflib.Graph()
     g.parse(pathfilename, format = 'ttl')
-    df = to_dataframe(g)
+    for s, p, o in g:
+      df.append((s, p, o))
 
     return df
 
