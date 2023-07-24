@@ -112,3 +112,31 @@ def convert_triples_to_id_files(df,text_df):
             relation_id = relation_to_id[row['relation']]
             object_id = entity_to_id[row['object']]
             triples_file.write(f"{subject_id}\t{object_id}\t{relation_id}\n")
+
+def top_2_hierarchy_triples(kg_df):
+
+    related = rdflib.URIRef("http://www.w3.org/2004/02/skos/core#related")
+    broader = rdflib.URIRef("http://www.w3.org/2004/02/skos/core#broader")
+# First, filter the DataFrame to include only rows with predicate "sos:broader"
+    broader_df = kg_df[kg_df['p'] == broader]
+
+
+# Create a list to store the top hierarchical rows
+    top_hierarchy_rows = []
+
+# Iterate over the unique subjects in the broader_df
+    for subject in broader_df['s'].unique():
+      top_hierarchy_rows.append(find_top_hierarchy(subject,broader_df))
+
+# Get the top 2 hierarchical rows
+    top_2_hierarchy = list(set(top_hierarchy_rows))[:2]
+
+    return top_2_hierarchy
+
+# use a recursive function to find the top hierarchical rows
+def find_top_hierarchy(subject,broader_df):
+    row = broader_df[broader_df['o'] == subject]
+    if len(row) == 0:
+        return subject
+    else:
+        return find_top_hierarchy(row.iloc[0]['s'])
