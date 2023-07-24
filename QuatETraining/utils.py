@@ -5,7 +5,7 @@ import pandas as pd
 import rdflib
 
 def load_ttl_files(pathfilename):
-    
+    df = pd.DataFrame(columns=['s', 'p', 'o'])
     g = rdflib.Graph()
     g.parse(pathfilename, format = 'ttl')
     df = to_dataframe(g)
