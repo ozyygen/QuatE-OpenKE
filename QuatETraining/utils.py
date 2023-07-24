@@ -23,17 +23,13 @@ def has_hierarcy_associative_clash(df):
     for _, row in df.iterrows():
         concept = row['s']
         relation = row['p']
-        related_concept = row['o']
+        other_concept = row['o']
 
-        if relation.startswith("skos:"):
-            opposite_relation = "skos:related" if relation == "skos:broader" else "skos:broader"
-            if df[(df['s'] == concept) & (df['p'] == opposite_relation) & (df['o'] == related_concept)].shape[0] > 0:
-                violating_triples.append((concept, relation, related_concept))
-                violating_triples.append((concept, opposite_relation, related_concept))
-            clashes = df[(df['s'] == concept) & (df['p'] == 'skos:related')]['o']
-            if related_concept in clashes.values:
-                violating_triples.append((concept, relation, related_concept))
-                violating_triples.append((concept, opposite_relation, related_concept))
+        if relation == "skos:related" :
+            if df[(df['s'] == other_concept) & (df['p'] == "skos:broader" ) & (df['o'] == concept)].shape[0] > 0:
+                violating_triples.append((concept, relation, other_concept))
+                violating_triples.append((other_concept, "skos:broader", concept))
+
 
     if violating_triples:
         updated_kg, negative_df = remove_and_update_kg(df,negative_df,violating_triples)
