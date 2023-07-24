@@ -19,20 +19,23 @@ def has_hierarcy_associative_clash(df):
     violating_triples = []
     negative_df = pd.DataFrame(columns=['s', 'p', 'o'])
     updated_kg = pd.DataFrame(columns=['s', 'p', 'o'])
+    related = rdflib.URIRef("http://www.w3.org/2004/02/skos/core#related")
+    broader = rdflib.URIRef("http://www.w3.org/2004/02/skos/core#broader")
 
     for _, row in df.iterrows():
         concept = row['s']
         relation = row['p']
         other_concept = row['o']
-
-        if relation == "http://www.w3.org/2004/02/skos/core#related" :
-            if df[(df['s'] == other_concept) & (df['p'] == "http://www.w3.org/2004/02/skos/core#broader" ) & (df['o'] == concept)]:
+ 
+        if relation == related :
+            
+            if df[(df['s'] == other_concept) & (df['p'] == broader ) & (df['o'] == concept)].shape[0] > 0:
                 violating_triples.append((concept, relation, other_concept))
-                violating_triples.append((other_concept, "http://www.w3.org/2004/02/skos/core#broader", concept))
-
+                violating_triples.append((other_concept, broader, concept))
+       
 
     if violating_triples:
-        updated_kg, negative_df = remove_and_update_kg(df,negative_df,violating_triples)
+      updated_kg, negative_df = remove_and_update_kg(df,negative_df,violating_triples)     
   
     else:
       print("Hiearchy is consistent in terms of hierarcical & associative links clashes")
