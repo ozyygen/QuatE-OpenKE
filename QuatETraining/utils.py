@@ -14,7 +14,8 @@ def load_ttl_files(pathfilename):
  
     return df
 
-
+#check for ¬∃s, o : skos:related(s, o) ∧ skos:broader(s, o) constraint
+#remove and store violating ones separetely
 def has_hierarcy_associative_clash(df):
     violating_triples = []
     negative_df = pd.DataFrame(columns=['s', 'p', 'o'])
@@ -57,7 +58,7 @@ def remove_and_update_kg(kg, negative_df, violating_triples):
     return kg, negative_df
 
 
-
+#train,test and valid set splits
 def split_dataset(df):
     df_shuffled = df.sample(frac=1, random_state=42)
     
@@ -73,7 +74,7 @@ def split_dataset(df):
     return df_train, df_valid, df_test
 
 
-
+#entity and rel to id
 def convert_to_id_files(df):
     # Extract unique entities and relations
     entities = df['entity'].unique()
@@ -89,6 +90,7 @@ def convert_to_id_files(df):
         for idx, relation in enumerate(relations):
             relation_file.write(f"{relation}\t{idx}\n")
 
+#train,test and valid to id
 def convert_triples_to_id_files(df,text_df):
     # Create dictionaries to map entities and relations to their IDs
     entity_to_id = {}
@@ -113,30 +115,27 @@ def convert_triples_to_id_files(df,text_df):
             object_id = entity_to_id[row['object']]
             triples_file.write(f"{subject_id}\t{object_id}\t{relation_id}\n")
 
+#for inferring TPR-followed implicit true positives
+#L0 and L1 levels of hiearchy manually constracted 
+#we are considering these levels noise-free
 def top_2_hierarchy_triples(kg_df):
-
-    related = rdflib.URIRef("http://www.w3.org/2004/02/skos/core#related")
     broader = rdflib.URIRef("http://www.w3.org/2004/02/skos/core#broader")
-# First, filter the DataFrame to include only rows with predicate "sos:broader"
-    broader_df = kg_df[kg_df['p'] == broader]
+    broader_triples = kg_df[(kg_df['p'] == broader)]
+
+    bottom_h_entities = set(kg_df['o']) - set(broader_triples['s'])
+    triples_generator = find_top_2_hierarchy(bottom_h_entities, 0, broader_triples)
+    top_2_hierarchy_triples = pd.DataFrame(triples_generator, columns=['s', 'p', 'o'])
+    return top_2_hierarchy_triples
+
+def find_top_2_hierarchy(entities, level, kg_df):
+    if level == 2:  # Limit the depth to 2 levels
+        return
+    next_entities = set()
+    for entity in entities:
+        rows = kg_df[kg_df['o'] == entity]
+        for _, row in rows.iterrows():
+            yield (row['s'], row['p'], row['o'])
+            next_entities.add(row['s'])
+    yield from find_top_2_hierarchy(next_entities, level + 1, kg_df)
 
 
-# Create a list to store the top hierarchical rows
-    top_hierarchy_rows = []
-
-# Iterate over the unique subjects in the broader_df
-    for subject in broader_df['s'].unique():
-      top_hierarchy_rows.append(find_top_hierarchy(subject,broader_df))
-
-# Get the top 2 hierarchical rows
-    top_2_hierarchy = list(set(top_hierarchy_rows))[:2]
-
-    return top_2_hierarchy
-
-# use a recursive function to find the top hierarchical rows
-def find_top_hierarchy(subject,broader_df):
-    row = broader_df[broader_df['o'] == subject]
-    if len(row) == 0:
-        return subject
-    else:
-        return find_top_hierarchy(row.iloc[0]['s'])
