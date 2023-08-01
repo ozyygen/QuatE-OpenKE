@@ -4,14 +4,8 @@
 #include "Triple.h"
 #include "Reader.h"
 
-
-INT corrupt_head(INT id, INT h, INT r,INT t, bool filter_flag = true) {
+INT corrupt_head(INT id, INT h, INT r, bool filter_flag = true) {
 	INT lef, rig, mid, ll, rr;
-    if (r == id2rel["skos:related"] ) || (r == id2rel["skos:broader"]) { 
-        return t;
-    }
-  
-    else{
 	if (not filter_flag) {
 		INT tmp = rand_max(id, entityTotal - 1);
 		if (tmp < h)
@@ -48,14 +42,9 @@ INT corrupt_head(INT id, INT h, INT r,INT t, bool filter_flag = true) {
 	}
 	return tmp + lef - ll + 1;
 }
-}
 
-INT corrupt_tail(INT id, INT t, INT r,INT h, bool filter_flag = true) {
+INT corrupt_tail(INT id, INT t, INT r, bool filter_flag = true) {
 	INT lef, rig, mid, ll, rr;
-    if (r == id2rel["skos:related"] ) || (r == id2rel["skos:broader"]) { 
-        return h;
-    }
-    else{
 	if (not filter_flag) {
 		INT tmp = rand_max(id, entityTotal - 1);
 		if (tmp < t)
@@ -92,20 +81,10 @@ INT corrupt_tail(INT id, INT t, INT r,INT h, bool filter_flag = true) {
 	}
 	return tmp + lef - ll + 1;
 }
-}
 
 
 INT corrupt_rel(INT id, INT h, INT t, INT r, bool p = false, bool filter_flag = true) {
-	INT lef, rig, mid, ll, rr, r_new;
-    if (r == id2rel["skos:related"] ){
-        r_new == id2rel["skos:broader"]
-        return r_new;
-    } 
-    else if (r == id2rel["skos:broader"]) { 
-        r_new == id2rel["skos:related"]
-        return r_new;
-    }
-    else{
+	INT lef, rig, mid, ll, rr;
 	if (not filter_flag) {
 		INT tmp = rand_max(id, relationTotal - 1);
 		if (tmp < r)
@@ -182,7 +161,6 @@ INT corrupt_rel(INT id, INT h, INT t, INT r, bool p = false, bool filter_flag = 
 	}
 	return tmp + lef - ll + 1;
 }
-}
 
 
 bool _find(INT h, INT t, INT r) {
@@ -198,15 +176,11 @@ bool _find(INT h, INT t, INT r) {
     return false;
 }
 
-INT corrupt(INT h, INT r, INT t){
+INT corrupt(INT h, INT r){
 	INT ll = tail_lef[r];
 	INT rr = tail_rig[r];
 	INT loop = 0;
 	INT t;
-    if (r == id2rel["skos:related"] ) || (r == id2rel["skos:broader"]) { 
-        return corrupt_head(0, h, r,t);
-    }
-    else{
 	while(true) {
 		t = tail_type[rand(ll, rr)];
 		if (not _find(h, t, r)) {
@@ -214,10 +188,9 @@ INT corrupt(INT h, INT r, INT t){
 		} else {
 			loop ++;
 			if (loop >= 1000) {
-				return corrupt_head(0, h, r,t);
+				return corrupt_head(0, h, r);
 			}
 		} 
 	}
-}
 }
 #endif

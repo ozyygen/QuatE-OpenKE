@@ -402,9 +402,9 @@ void getNegTest() {
     for (INT i = 0; i < testTotal; i++) {
         negTestList[i] = testList[i];
         if (randd(0) % 1000 < 500)
-            negTestList[i].t = corrupt_head(0, testList[i].h, testList[i].r);
+            negTestList[i].t = corrupt_head(0, testList[i].h, testList[i].r,testList[i].t);
         else
-            negTestList[i].h = corrupt_tail(0, testList[i].t, testList[i].r);
+            negTestList[i].h = corrupt_tail(0, testList[i].t, testList[i].r,testList[i].h);
     }
 }
 
