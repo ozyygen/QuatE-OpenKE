@@ -62,6 +62,12 @@ void importTrainFiles() {
         fin = fopen(rel_file.c_str(), "r");
 	tmp = fscanf(fin, "%ld", &relationTotal);
 	printf("The total of relations is %ld.\n", relationTotal);
+    for (int i = 0; i < relationTotal; i++) {
+        char relName[100];
+        int relId;
+        tmp = fscanf(fin, "%s%s", relName, &relId);
+        id2rel[relName] = relId;
+    }
 	fclose(fin);
 
     if (ent_file == "")
