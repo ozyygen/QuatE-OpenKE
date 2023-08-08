@@ -77,8 +77,8 @@ def split_dataset(df):
 #entity and rel to id
 def convert_to_id_files(df):
     # Extract unique entities and relations
-    entities_s = df['s'].unique()
-    entities_o = df['o'].unique()
+    entities_s = df.drop_duplicates(subset=['s'])
+    entities_o = df.drop_duplicates(subset=['o'])
     entities = pd.concat([entities_s ,entities_o],axis=1).unique()
     relations = df['r'].unique()
 
