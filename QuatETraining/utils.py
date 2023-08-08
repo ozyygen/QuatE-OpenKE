@@ -76,26 +76,29 @@ def split_dataset(df):
 
 #entity and rel to id
 def convert_to_id_files(df):
+    entities_s = pd.DataFrame({'e':[]})
+    entities_o = pd.DataFrame({'e':[]})
     # Extract unique entities and relations
-    entities_s = df.drop_duplicates(subset=['s'])
-    entities_o = df.drop_duplicates(subset=['o'])
-    entities = pd.concat([entities_s ,entities_o],axis=1).unique()
-    relations = df['r'].unique()
+    entities_s['e'] = df['s'] 
+    entities_o['e'] = df['o'] 
+    entities_all = pd.concat([entities_s ,entities_o],ignore_index=True).reset_index()
+    relations = df['p'].drop_duplicates() 
+    entities = entities_all['e'].drop_duplicates() 
 
     e_to_id = {}
     rel_to_id = {}
 
     # Save entity IDs to a text file
     with open('entity2id.txt', 'w') as entity_file:
+        entity_file.write(f"{len(entities)}\n")
         for idx, entity in enumerate(entities):
-            entity_file.write(f"{len(entities)}+\n")
             entity_file.write(f"{entity}\t{idx}\n")
             e_to_id[entity] = idx
 
     # Save relation IDs to a text file
     with open('relation2id.txt', 'w') as relation_file:
+        relation_file.write(f"{len(relations)}\n")
         for idx, relation in enumerate(relations):
-            relation_file.write(f"{len(relations)}+\n")
             relation_file.write(f"{relation}\t{idx}\n")
             rel_to_id[relation] = idx
     return e_to_id, rel_to_id
@@ -105,6 +108,7 @@ def convert_triples_to_id_files(entity_to_id, relation_to_id,df,text_df):
 
     # Save triple IDs to a text file
     with open(text_df, 'w') as triples_file:
+        triples_file.write(f"{len(df)}\n")
         for _, row in df.iterrows():
             subject_id = entity_to_id[row['s']]
             relation_id = relation_to_id[row['p']]
