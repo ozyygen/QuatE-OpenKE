@@ -77,42 +77,38 @@ def split_dataset(df):
 #entity and rel to id
 def convert_to_id_files(df):
     # Extract unique entities and relations
-    entities = df['entity'].unique()
-    relations = df['relation'].unique()
+    entities_s = df['s'].unique()
+    entities_o = df['o'].unique()
+    entities = pd.concat([entities_s ,entities_o],axis=1).unique()
+    relations = df['r'].unique()
+
+    e_to_id = {}
+    rel_to_id = {}
 
     # Save entity IDs to a text file
-    with open('entity_ids.txt', 'w') as entity_file:
+    with open('entity2id.txt', 'w') as entity_file:
         for idx, entity in enumerate(entities):
+            entity_file.write(f"{len(entities)}+\n")
             entity_file.write(f"{entity}\t{idx}\n")
+            e_to_id[entity] = idx
 
     # Save relation IDs to a text file
-    with open('relation_ids.txt', 'w') as relation_file:
+    with open('relation2id.txt', 'w') as relation_file:
         for idx, relation in enumerate(relations):
+            relation_file.write(f"{len(relations)}+\n")
             relation_file.write(f"{relation}\t{idx}\n")
+            rel_to_id[relation] = idx
+    return e_to_id, rel_to_id
 
 #train,test and valid to id
-def convert_triples_to_id_files(df,text_df):
-    # Create dictionaries to map entities and relations to their IDs
-    entity_to_id = {}
-    relation_to_id = {}
-
-    # Extract unique entities and relations
-    entities = df['entity'].unique()
-    relations = df['relation'].unique()
-
-    # Assign IDs to entities and relations
-    for idx, entity in enumerate(entities):
-        entity_to_id[entity] = idx
-
-    for idx, relation in enumerate(relations):
-        relation_to_id[relation] = idx
+def convert_triples_to_id_files(entity_to_id, relation_to_id,df,text_df):
 
     # Save triple IDs to a text file
     with open(text_df, 'w') as triples_file:
         for _, row in df.iterrows():
-            subject_id = entity_to_id[row['entity']]
-            relation_id = relation_to_id[row['relation']]
-            object_id = entity_to_id[row['object']]
+            subject_id = entity_to_id[row['s']]
+            relation_id = relation_to_id[row['p']]
+            object_id = entity_to_id[row['o']]
             triples_file.write(f"{subject_id}\t{object_id}\t{relation_id}\n")
 
 #for inferring TPR-followed implicit true positives
