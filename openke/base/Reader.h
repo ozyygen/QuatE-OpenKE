@@ -6,8 +6,9 @@
 #include <algorithm>
 #include <iostream>
 #include <cmath>
+#include <map>
 
-std::map<std::string, string> id2rel;
+std::map<std::string, int> id2rel;
 INT *freqRel, *freqEnt;
 INT *lefHead, *rigHead;
 INT *lefTail, *rigTail;
@@ -66,7 +67,7 @@ void importTrainFiles() {
     for (int i = 0; i < relationTotal; i++) {
         char relName[100];
         int relId;
-        tmp = fscanf(fin, "%s%s", relName, &relId);
+        tmp = fscanf(fin, "%s%d", relName, &relId);
         id2rel[relName] = relId;
     }
 	fclose(fin);
