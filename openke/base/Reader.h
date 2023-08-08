@@ -7,6 +7,7 @@
 #include <iostream>
 #include <cmath>
 
+std::map<std::string, string> id2rel;
 INT *freqRel, *freqEnt;
 INT *lefHead, *rigHead;
 INT *lefTail, *rigTail;
