@@ -7,7 +7,7 @@
 
 INT corrupt_head(INT id, INT h, INT r,INT t, bool filter_flag = true) {
 	INT lef, rig, mid, ll, rr;
-    if (r == id2rel["skos:related"] ) || (r == id2rel["skos:broader"]) { 
+    if (r == id2rel["http://www.w3.org/2004/02/skos/core#related"] || r == id2rel["http://www.w3.org/2004/02/skos/core#broader"]) { 
         return t;
     }
   
@@ -52,7 +52,7 @@ INT corrupt_head(INT id, INT h, INT r,INT t, bool filter_flag = true) {
 
 INT corrupt_tail(INT id, INT t, INT r,INT h, bool filter_flag = true) {
 	INT lef, rig, mid, ll, rr;
-    if (r == id2rel["skos:related"] ) || (r == id2rel["skos:broader"]) { 
+    if (r == id2rel["http://www.w3.org/2004/02/skos/core#related"]  || r == id2rel["http://www.w3.org/2004/02/skos/core#broader"]) { 
         return h;
     }
     else{
@@ -97,12 +97,12 @@ INT corrupt_tail(INT id, INT t, INT r,INT h, bool filter_flag = true) {
 
 INT corrupt_rel(INT id, INT h, INT t, INT r, bool p = false, bool filter_flag = true) {
 	INT lef, rig, mid, ll, rr, r_new;
-    if (r == id2rel["skos:related"] ){
-        r_new == id2rel["skos:broader"]
+    if (r == id2rel["http://www.w3.org/2004/02/skos/core#related"] ){
+        r_new == id2rel["http://www.w3.org/2004/02/skos/core#broader"];
         return r_new;
     } 
-    else if (r == id2rel["skos:broader"]) { 
-        r_new == id2rel["skos:related"]
+    else if (r == id2rel["http://www.w3.org/2004/02/skos/core#broader"]) { 
+        r_new == id2rel["http://www.w3.org/2004/02/skos/core#related"];
         return r_new;
     }
     else{
@@ -202,8 +202,7 @@ INT corrupt(INT h, INT r, INT t){
 	INT ll = tail_lef[r];
 	INT rr = tail_rig[r];
 	INT loop = 0;
-	INT t;
-    if (r == id2rel["skos:related"] ) || (r == id2rel["skos:broader"]) { 
+    if (r == id2rel["http://www.w3.org/2004/02/skos/core#related"] || r == id2rel["http://www.w3.org/2004/02/skos/core#broader"]) { 
         return corrupt_head(0, h, r,t);
     }
     else{
