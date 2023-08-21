@@ -7,7 +7,7 @@ from data import TrainDataLoader, TestDataLoader
 # dataloader for training
 train_dataloader = TrainDataLoader(
 	in_path = "./benchmarks/FB13/", 
-	nbatches = 100,
+	nbatches = 50,
 	threads = 8, 
 	sampling_mode = "normal", 
 	bern_flag = 1, 
