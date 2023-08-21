@@ -33,7 +33,7 @@ model = NegativeSampling(
 	batch_size = train_dataloader.get_batch_size(), 
 	regul_rate = 1.0
 )
-
+print(train_dataloader.get_batch_size())
 # train the model
 trainer = Trainer(model = model, data_loader = train_dataloader, alpha = 0.5, use_gpu = False, checkpoint_dir="./checkpoint/",opt_method = "adagrad")
 trainer.run()
