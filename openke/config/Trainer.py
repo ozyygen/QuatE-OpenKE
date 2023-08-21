@@ -87,6 +87,7 @@ class Trainer(object):
 		print("Finish initializing...")
 		
 		training_range = tqdm(range(self.train_times))
+		print(training_range)
 		for epoch in training_range:
 			res = 0.0
 			for data in self.data_loader:
