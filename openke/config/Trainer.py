@@ -90,7 +90,7 @@ class Trainer(object):
 			training_range = tqdm(range(self.train_times))
 		except Exception as error:
     			print("An exception occurred:", error)
-		print(training_range)
+		print("dene1")
 		for epoch in training_range:
 			res = 0.0
 			for data in self.data_loader:
