@@ -86,7 +86,10 @@ class Trainer(object):
 			)
 		print("Finish initializing...")
 		
-		training_range = tqdm(range(self.train_times))
+		try:
+			training_range = tqdm(range(self.train_times))
+		except Exception as error:
+    			print("An exception occurred:", error)
 		print(training_range)
 		for epoch in training_range:
 			res = 0.0

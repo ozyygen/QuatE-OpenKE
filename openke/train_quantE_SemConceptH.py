@@ -35,7 +35,7 @@ model = NegativeSampling(
 )
 
 # train the model
-trainer = Trainer(model = model, data_loader = train_dataloader, train_times = 2000, alpha = 0.5, use_gpu = False, checkpoint_dir="./checkpoint/",opt_method = "adagrad")
+trainer = Trainer(model = model, data_loader = train_dataloader, alpha = 0.5, use_gpu = False, checkpoint_dir="./checkpoint/",opt_method = "adagrad")
 trainer.run()
 print('dene2')
 quantE.save_checkpoint('./checkpoint/quantE.ckpt')
