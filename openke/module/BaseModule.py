@@ -18,6 +18,7 @@ class BaseModule(nn.Module):
 		self.eval()
 
 	def save_checkpoint(self, path):
+		os.makedirs(os.path.dirname(path), exist_ok=True)
 		torch.save(self.state_dict(), path)
 
 	def load_parameters(self, path):
