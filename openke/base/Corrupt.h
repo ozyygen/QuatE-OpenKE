@@ -4,10 +4,12 @@
 #include "Triple.h"
 #include "Reader.h"
 
-
 INT corrupt_head(INT id, INT h, INT r,INT t, bool filter_flag = true) {
 	INT lef, rig, mid, ll, rr;
-    if (r == id2rel["http://www.w3.org/2004/02/skos/core#related"] || r == id2rel["http://www.w3.org/2004/02/skos/core#broader"]) { 
+	int rel_id = rel2id["http://www.w3.org/2004/02/skos/core#related"];
+	int brod_id = rel2id["http://www.w3.org/2004/02/skos/core#broader"];
+	
+    if (r == rel_id || r == brod_id ) { 
         return t;
     }
   
@@ -50,9 +52,11 @@ INT corrupt_head(INT id, INT h, INT r,INT t, bool filter_flag = true) {
 }
 }
 
-INT corrupt_tail(INT id, INT t, INT r,INT h, bool filter_flag = true) {
+INT corrupt_tail(INT id, INT t, INT r, INT h, bool filter_flag = true) {
 	INT lef, rig, mid, ll, rr;
-    if (r == id2rel["http://www.w3.org/2004/02/skos/core#related"]  || r == id2rel["http://www.w3.org/2004/02/skos/core#broader"]) { 
+	int rel_id = rel2id["http://www.w3.org/2004/02/skos/core#related"];
+	int brod_id = rel2id["http://www.w3.org/2004/02/skos/core#broader"];
+    if (r == rel_id  || r == brod_id) { 
         return h;
     }
     else{
@@ -97,12 +101,14 @@ INT corrupt_tail(INT id, INT t, INT r,INT h, bool filter_flag = true) {
 
 INT corrupt_rel(INT id, INT h, INT t, INT r, bool p = false, bool filter_flag = true) {
 	INT lef, rig, mid, ll, rr, r_new;
-    if (r == id2rel["http://www.w3.org/2004/02/skos/core#related"] ){
-        r_new == id2rel["http://www.w3.org/2004/02/skos/core#broader"];
+	int rel_id = rel2id["http://www.w3.org/2004/02/skos/core#related"];
+	int brod_id = rel2id["http://www.w3.org/2004/02/skos/core#broader"];
+    if (r == rel_id ){
+        r_new = brod_id;
         return r_new;
     } 
-    else if (r == id2rel["http://www.w3.org/2004/02/skos/core#broader"]) { 
-        r_new == id2rel["http://www.w3.org/2004/02/skos/core#related"];
+    else if (r == brod_id) { 
+        r_new = rel_id;
         return r_new;
     }
     else{
@@ -198,11 +204,15 @@ bool _find(INT h, INT t, INT r) {
     return false;
 }
 
-INT corrupt(INT h, INT r, INT t){
+/*
+INT corrupt(INT h, INT r){
 	INT ll = tail_lef[r];
 	INT rr = tail_rig[r];
 	INT loop = 0;
-    if (r == id2rel["http://www.w3.org/2004/02/skos/core#related"] || r == id2rel["http://www.w3.org/2004/02/skos/core#broader"]) { 
+	INT t;
+	int rel_id = rel2id["http://www.w3.org/2004/02/skos/core#related"];
+	int brod_id = rel2id["http://www.w3.org/2004/02/skos/core#broader"];
+    if (r == rel_id || r == brod_id) { 
         return corrupt_head(0, h, r,t);
     }
     else{
@@ -219,4 +229,5 @@ INT corrupt(INT h, INT r, INT t){
 	}
 }
 }
+*/
 #endif

@@ -107,34 +107,46 @@ void* getBatch(void* con) {
 			batch_r[batch] = trainList[i].r;
 			batch_y[batch] = 1;
 			INT last = batchSize;
+			INT rel_id = rel2id["http://www.w3.org/2004/02/skos/core#related"];
+			INT brod_id = rel2id["http://www.w3.org/2004/02/skos/core#broader"];
+			INT r;
 			for (INT times = 0; times < negRate; times ++) {
-				if (mode == 0){
-					if (bernFlag)
-						prob = 1000 * right_mean[trainList[i].r] / (right_mean[trainList[i].r] + left_mean[trainList[i].r]);
-					if (randd(id) % 1000 < prob) {
-						batch_h[batch + last] = trainList[i].h;
-						batch_t[batch + last] = corrupt_head(id, trainList[i].h, trainList[i].r, trainList[i].t);
-						batch_r[batch + last] = trainList[i].r;
+				if (r == rel_id || r == brod_id ) {
+            		negTestList[i].t = corrupt_head(0, testList[i].h, testList[i].r,testList[i].t);
+            		negTestList[i].h = corrupt_tail(0, testList[i].t, testList[i].r,testList[i].h);
+            		negTestList[i].r = corrupt_rel(0, testList[i].h, testList[i].t,testList[i].r);
+    
+        		}
+        		else{
+					if (mode == 0){
+						if (bernFlag)
+							prob = 1000 * right_mean[trainList[i].r] / (right_mean[trainList[i].r] + left_mean[trainList[i].r]);
+					
+						if (randd(id) % 1000 < prob) {
+							batch_h[batch + last] = trainList[i].h;
+							batch_t[batch + last] = corrupt_head(id, trainList[i].h, trainList[i].r,trainList[i].t);
+							batch_r[batch + last] = trainList[i].r;
+						} else {
+							batch_h[batch + last] = corrupt_tail(id, trainList[i].t, trainList[i].r,trainList[i].h);
+							batch_t[batch + last] = trainList[i].t;
+							batch_r[batch + last] = trainList[i].r;
+						}
+						batch_y[batch + last] = -1;
+						last += batchSize;
 					} else {
-						batch_h[batch + last] = corrupt_tail(id, trainList[i].t, trainList[i].r, trainList[i].h);
-						batch_t[batch + last] = trainList[i].t;
-						batch_r[batch + last] = trainList[i].r;
+						if(mode == -1){
+							batch_h[batch + last] = corrupt_tail(id, trainList[i].t, trainList[i].r,trainList[i].h);
+							batch_t[batch + last] = trainList[i].t;
+							batch_r[batch + last] = trainList[i].r;
+						} else {
+							batch_h[batch + last] = trainList[i].h;
+							batch_t[batch + last] = corrupt_head(id, trainList[i].h, trainList[i].r,trainList[i].t);
+							batch_r[batch + last] = trainList[i].r;
+						}
+						batch_y[batch + last] = -1;
+						last += batchSize;
 					}
-					batch_y[batch + last] = -1;
-					last += batchSize;
-				} else {
-					if(mode == -1){
-						batch_h[batch + last] = corrupt_tail(id, trainList[i].t, trainList[i].r, trainList[i].h);
-						batch_t[batch + last] = trainList[i].t;
-						batch_r[batch + last] = trainList[i].r;
-					} else {
-						batch_h[batch + last] = trainList[i].h;
-						batch_t[batch + last] = corrupt_head(id, trainList[i].h, trainList[i].r, trainList[i].t);
-						batch_r[batch + last] = trainList[i].r;
-					}
-					batch_y[batch + last] = -1;
-					last += batchSize;
-				}
+				}	
 			}
 			for (INT times = 0; times < negRelRate; times++) {
 				batch_h[batch + last] = trainList[i].h;

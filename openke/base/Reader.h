@@ -2,13 +2,17 @@
 #define READER_H
 #include "Setting.h"
 #include "Triple.h"
+#include "HashMap.h"
 #include <cstdlib>
 #include <algorithm>
 #include <iostream>
 #include <cmath>
-#include <map>
+#include <unordered_map>
 
-std::map<std::string, int> id2rel;
+using namespace std;
+
+
+ 
 INT *freqRel, *freqEnt;
 INT *lefHead, *rigHead;
 INT *lefTail, *rigTail;
@@ -51,26 +55,60 @@ void importProb(REAL temp){
     fclose(fin);
 }
 
+struct MyKeyHash {
+	unsigned long operator()(const string& str) const
+	{
+		unsigned int hash = 1315423911;
+
+      for(size_t i = 0; i < str.length(); i++)
+      {
+          hash ^= ((hash << 5) + str[i] + (hash >> 2));
+      }
+      return (hash & 0x7FFFFFFF);
+    	}
+};
+
+
+//HashMap<string, long, 99999999999999, MyKeyHash> hmap;
+
 extern "C"
 void importTrainFiles() {
 
 	printf("The toolkit is importing datasets.\n");
+    
 	FILE *fin;
-	int tmp;
-
+	int tmp,tmp_rel;
+    long a,b;
     if (rel_file == "")
 	    fin = fopen((inPath + "relation2id.txt").c_str(), "r");
     else
         fin = fopen(rel_file.c_str(), "r");
+    
 	tmp = fscanf(fin, "%ld", &relationTotal);
+    
 	printf("The total of relations is %ld.\n", relationTotal);
-    for (int i = 0; i < relationTotal; i++) {
-        char relName[100];
-        int relId;
-        tmp = fscanf(fin, "%s%d", relName, &relId);
-        id2rel[relName] = relId;
+    
+    tmp = fscanf(fin, "%ld", &relationTotal);
+    char line[256]; // Buffer to read each line from the file
+    long prntbr, prntrel;
+    while (fgets(line, sizeof(line), fin)) {
+        
+        string tabSeparatedLine = line;
+        size_t tabPos = tabSeparatedLine.find('\t');
+        if (tabPos != string::npos) {
+            string relName = tabSeparatedLine.substr(0, tabPos);
+            long relId;
+           
+            relId = stol(tabSeparatedLine.substr(tabPos, tabSeparatedLine.length()));
+             
+            //hmap.put(relName, relId);
+            rel2id[relName] = relId;
+
+            // Optional: Print the parsed values for verification
+           
+        }
     }
-	fclose(fin);
+    fclose(fin);
 
     if (ent_file == "")
         fin = fopen((inPath + "entity2id.txt").c_str(), "r");

@@ -1,13 +1,12 @@
-import openke
-from openke.config import Trainer, Tester
-from openke.module.model.QuantE import QuantE
-from openke.module.loss import SoftplusLoss
-from openke.module.strategy import NegativeSampling
-from openke.data import TrainDataLoader, TestDataLoader
+from config import Trainer, Tester
+from module.model.QuantE import QuantE
+from module.loss import SoftplusLoss
+from module.strategy import NegativeSampling
+from data import TrainDataLoader, TestDataLoader
 
 # dataloader for training
 train_dataloader = TrainDataLoader(
-	in_path = "./benchmarks/WN18RR/", 
+	in_path = "./benchmarks/FB13/", 
 	nbatches = 100,
 	threads = 8, 
 	sampling_mode = "normal", 
@@ -18,7 +17,7 @@ train_dataloader = TrainDataLoader(
 )
 
 # dataloader for test
-test_dataloader = TestDataLoader("./benchmarks/WN18RR/", "link")
+test_dataloader = TestDataLoader("./benchmarks/FB13/", "link")
 
 # define the model
 quantE = QuantE(

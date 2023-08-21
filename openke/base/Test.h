@@ -397,15 +397,26 @@ Triple *negTestList = NULL;
 
 extern "C"
 void getNegTest() {
+    INT rel_id = rel2id["http://www.w3.org/2004/02/skos/core#related"];
+	INT brod_id = rel2id["http://www.w3.org/2004/02/skos/core#broader"];
+	INT r;
     if (negTestList == NULL)
         negTestList = (Triple *)calloc(testTotal, sizeof(Triple));
     for (INT i = 0; i < testTotal; i++) {
+        r = testList[i].r;
+        if (r == rel_id || r == brod_id ) {
+            negTestList[i].t = corrupt_head(0, testList[i].h, testList[i].r,testList[i].t);
+            negTestList[i].h = corrupt_tail(0, testList[i].t, testList[i].r,testList[i].h);
+            negTestList[i].r = corrupt_rel(0, testList[i].h, testList[i].t,testList[i].r);
+    
+        }
+        else{
         negTestList[i] = testList[i];
         if (randd(0) % 1000 < 500)
             negTestList[i].t = corrupt_head(0, testList[i].h, testList[i].r,testList[i].t);
         else
             negTestList[i].h = corrupt_tail(0, testList[i].t, testList[i].r,testList[i].h);
-    }
+    }}
 }
 
 extern "C"
