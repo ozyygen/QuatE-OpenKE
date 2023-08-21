@@ -35,11 +35,11 @@ model = NegativeSampling(
 )
 
 # train the model
-trainer = Trainer(model = model, data_loader = train_dataloader, train_times = 2000, alpha = 0.5, use_gpu = True, opt_method = "adagrad")
+trainer = Trainer(model = model, data_loader = train_dataloader, train_times = 2000, alpha = 0.5, use_gpu = False, opt_method = "adagrad")
 trainer.run()
 quantE.save_checkpoint('./checkpoint/quantE.ckpt')
 
 # test the model
 quantE.load_checkpoint('./checkpoint/quantE.ckpt')
-tester = Tester(model = quantE, data_loader = test_dataloader, use_gpu = True)
+tester = Tester(model = quantE, data_loader = test_dataloader, use_gpu = False)
 tester.run_link_prediction(type_constrain = False)
