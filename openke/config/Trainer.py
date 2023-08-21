@@ -86,22 +86,22 @@ class Trainer(object):
 			)
 		print("Finish initializing...")
 		
+		
+		training_range = tqdm(range(self.train_times))
+		
 		try:
-			training_range = tqdm(range(self.train_times))
+			for epoch in training_range:
+				res = 0.0
+				for data in self.data_loader:
+					loss = self.train_one_step(data)
+					res += loss
+				training_range.set_description("Epoch %d | loss: %f" % (epoch, res))
+				print('dene')
+				if self.save_steps and self.checkpoint_dir and (epoch + 1) % self.save_steps == 0:
+					print("Epoch %d has finished, saving..." % (epoch))
+					self.model.save_checkpoint(os.path.join(self.checkpoint_dir + "-" + str(epoch) + ".ckpt"))
 		except Exception as error:
     			print("An exception occurred:", error)
-		print("dene1")
-		for epoch in training_range:
-			res = 0.0
-			for data in self.data_loader:
-				loss = self.train_one_step(data)
-				res += loss
-			training_range.set_description("Epoch %d | loss: %f" % (epoch, res))
-			print('dene')
-			if self.save_steps and self.checkpoint_dir and (epoch + 1) % self.save_steps == 0:
-				print("Epoch %d has finished, saving..." % (epoch))
-				self.model.save_checkpoint(os.path.join(self.checkpoint_dir + "-" + str(epoch) + ".ckpt"))
-
 	def set_model(self, model):
 		self.model = model
 
