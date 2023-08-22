@@ -14,6 +14,7 @@ class TrainDataSampler(object):
 		return self
 
 	def __next__(self):
+		print(f'batch:{self.batch}')
 		self.batch += 1 
 		if self.batch > self.nbatches:
 			raise StopIteration()
@@ -119,6 +120,7 @@ class TrainDataLoader(object):
 			0,
 			0
 		)
+		print('sampling')
 		return {
 			"batch_h": self.batch_h, 
 			"batch_t": self.batch_t, 
@@ -220,6 +222,7 @@ class TrainDataLoader(object):
 		return self.tripleTotal
 
 	def __iter__(self):
+		print('heho')
 		if self.sampling_mode == "normal":
 			return TrainDataSampler(self.nbatches, self.sampling)
 		else:

@@ -2,12 +2,12 @@
 #define READER_H
 #include "Setting.h"
 #include "Triple.h"
-#include "HashMap.h"
 #include <cstdlib>
 #include <algorithm>
 #include <iostream>
 #include <cmath>
-#include <unordered_map>
+#include <string.h>  /* for strcpy, as you cannot directly assign strings to a malloc'd pointer */
+#include <stdlib.h> 
 
 using namespace std;
 
@@ -55,25 +55,10 @@ void importProb(REAL temp){
     fclose(fin);
 }
 
-struct MyKeyHash {
-	unsigned long operator()(const string& str) const
-	{
-		unsigned int hash = 1315423911;
-
-      for(size_t i = 0; i < str.length(); i++)
-      {
-          hash ^= ((hash << 5) + str[i] + (hash >> 2));
-      }
-      return (hash & 0x7FFFFFFF);
-    	}
-};
-
-
-//HashMap<string, long, 99999999999999, MyKeyHash> hmap;
-
 extern "C"
 void importTrainFiles() {
-
+    const int key_size   = 10; /* define how big keys and values will be */
+    const int value_size = 10;
 	printf("The toolkit is importing datasets.\n");
     
 	FILE *fin;
@@ -87,24 +72,31 @@ void importTrainFiles() {
 	tmp = fscanf(fin, "%ld", &relationTotal);
     
 	printf("The total of relations is %ld.\n", relationTotal);
-    
+    rel2id.size = 30; /* how many keyValues we will have */
+
+    rel2id.keyValue = (_keyValue *)malloc(sizeof(_keyValue) * rel2id.size);   // create storage big enough for 30 _keyValue structs
+                                                    
     tmp = fscanf(fin, "%ld", &relationTotal);
     char line[256]; // Buffer to read each line from the file
     long prntbr, prntrel;
+    INT count = 0;
     while (fgets(line, sizeof(line), fin)) {
         
         string tabSeparatedLine = line;
         size_t tabPos = tabSeparatedLine.find('\t');
         if (tabPos != string::npos) {
             string relName = tabSeparatedLine.substr(0, tabPos);
+            std::string *ptrToString = &relName; 
             long relId;
            
             relId = stol(tabSeparatedLine.substr(tabPos, tabSeparatedLine.length()));
-             
-            //hmap.put(relName, relId);
-            rel2id[relName] = relId;
-
-            // Optional: Print the parsed values for verification
+            long *ptr = &relId;
+            
+            rel2id.keyValue[count].key = (string *)malloc(sizeof(char) * key_size);
+            rel2id.keyValue[count].key = ptrToString;
+            rel2id.keyValue[count].value = (long *)malloc(sizeof(char) * value_size);
+            rel2id.keyValue[count].value = ptr;
+            count +=1;
            
         }
     }

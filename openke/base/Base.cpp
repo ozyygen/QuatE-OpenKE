@@ -6,6 +6,8 @@
 #include <cstdlib>
 #include <pthread.h>
 
+using namespace std;
+
 extern "C"
 void setInPath(char *path);
 
@@ -75,6 +77,7 @@ struct Parameter {
 	bool filter_flag;
 };
 
+
 void* getBatch(void* con) {
 	Parameter *para = (Parameter *)(con);
 	INT id = para -> id;
@@ -107,9 +110,13 @@ void* getBatch(void* con) {
 			batch_r[batch] = trainList[i].r;
 			batch_y[batch] = 1;
 			INT last = batchSize;
-			INT rel_id = rel2id["http://www.w3.org/2004/02/skos/core#related"];
-			INT brod_id = rel2id["http://www.w3.org/2004/02/skos/core#broader"];
+			INT rel_id, brod_id;
+
+			rel_id = find_id("http://www.w3.org/2004/02/skos/core#related");
+			brod_id = find_id("http://www.w3.org/2004/02/skos/core#broader");
+	
 			INT r;
+			r = trainList[i].r;
 			for (INT times = 0; times < negRate; times ++) {
 				if (r == rel_id || r == brod_id ) {
             		negTestList[i].t = corrupt_head(0, testList[i].h, testList[i].r,testList[i].t);

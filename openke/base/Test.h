@@ -395,10 +395,14 @@ triple classification
 ======================================================================================*/
 Triple *negTestList = NULL;
 
+
 extern "C"
 void getNegTest() {
-    INT rel_id = rel2id["http://www.w3.org/2004/02/skos/core#related"];
-	INT brod_id = rel2id["http://www.w3.org/2004/02/skos/core#broader"];
+    INT rel_id, brod_id;
+
+	rel_id = find_id("http://www.w3.org/2004/02/skos/core#related");
+	brod_id = find_id("http://www.w3.org/2004/02/skos/core#broader");
+	
 	INT r;
     if (negTestList == NULL)
         negTestList = (Triple *)calloc(testTotal, sizeof(Triple));
@@ -430,5 +434,13 @@ void getTestBatch(INT *ph, INT *pt, INT *pr, INT *nh, INT *nt, INT *nr) {
         nt[i] = negTestList[i].t;
         nr[i] = negTestList[i].r;
     }
+    free(negTestList);
+
+    for(int i=0;i<10;++i){
+        free(rel2id.keyValue[i].key);
+        free(rel2id.keyValue[i].value);
+    }
+    free(rel2id.keyValue);
+    
 }
 #endif

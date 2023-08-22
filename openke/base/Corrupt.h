@@ -4,10 +4,33 @@
 #include "Triple.h"
 #include "Reader.h"
 
+INT find_id(string r){
+	INT count = 0, flag = 0;
+	INT id;
+	while (count != -1)
+	{
+		string *ptrToString = rel2id.keyValue[count].key;
+		string actualString = *ptrToString;
+
+		if (flag == 0 && actualString == r)
+		{
+			long *ptrToLong = rel2id.keyValue[count].value;
+			long actualLong = *ptrToLong;
+			id = actualLong;
+			flag = 1;
+		}
+		if(flag==1)
+			count = -1;
+	}
+	return id;
+}
+
 INT corrupt_head(INT id, INT h, INT r,INT t, bool filter_flag = true) {
 	INT lef, rig, mid, ll, rr;
-	int rel_id = rel2id["http://www.w3.org/2004/02/skos/core#related"];
-	int brod_id = rel2id["http://www.w3.org/2004/02/skos/core#broader"];
+	INT rel_id, brod_id;
+
+	rel_id = find_id("http://www.w3.org/2004/02/skos/core#related");
+	brod_id = find_id("http://www.w3.org/2004/02/skos/core#broader");
 	
     if (r == rel_id || r == brod_id ) { 
         return t;
@@ -54,8 +77,11 @@ INT corrupt_head(INT id, INT h, INT r,INT t, bool filter_flag = true) {
 
 INT corrupt_tail(INT id, INT t, INT r, INT h, bool filter_flag = true) {
 	INT lef, rig, mid, ll, rr;
-	int rel_id = rel2id["http://www.w3.org/2004/02/skos/core#related"];
-	int brod_id = rel2id["http://www.w3.org/2004/02/skos/core#broader"];
+	INT rel_id, brod_id;
+
+	rel_id = find_id("http://www.w3.org/2004/02/skos/core#related");
+	brod_id = find_id("http://www.w3.org/2004/02/skos/core#broader");
+	
     if (r == rel_id  || r == brod_id) { 
         return h;
     }
@@ -101,9 +127,12 @@ INT corrupt_tail(INT id, INT t, INT r, INT h, bool filter_flag = true) {
 
 INT corrupt_rel(INT id, INT h, INT t, INT r, bool p = false, bool filter_flag = true) {
 	INT lef, rig, mid, ll, rr, r_new;
-	int rel_id = rel2id["http://www.w3.org/2004/02/skos/core#related"];
-	int brod_id = rel2id["http://www.w3.org/2004/02/skos/core#broader"];
-    if (r == rel_id ){
+	INT rel_id, brod_id;
+
+	rel_id = find_id("http://www.w3.org/2004/02/skos/core#related");
+	brod_id = find_id("http://www.w3.org/2004/02/skos/core#broader");
+	
+	if (r == rel_id ){
         r_new = brod_id;
         return r_new;
     } 

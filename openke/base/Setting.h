@@ -5,7 +5,7 @@
 #include <cstring>
 #include <cstdio>
 #include <string>
-#include <unordered_map>
+#include<stdio.h>
 
 std::string inPath = "../data/FB15K/";
 std::string outPath = "../data/FB15K/";
@@ -14,7 +14,25 @@ std::string rel_file = "";
 std::string train_file = "";
 std::string valid_file = "";
 std::string test_file = "";
-std::unordered_map<std::string, long> rel2id;
+
+extern "C"
+typedef struct _keyValue
+{
+    std::string *key;
+    long *value;
+} _keyValue;
+
+extern "C"
+typedef struct _keyValues
+{
+    
+    _keyValue *keyValue;
+    int size;
+} _keyValues;
+
+_keyValues rel2id;
+
+
 extern "C"
 void setInPath(char *path) {
 	INT len = strlen(path);
@@ -136,9 +154,7 @@ INT getValidTotal() {
 }
 
 
-std::unordered_map<std::string, long> getRel2Id() {
-	return rel2id;
-}
+
 /*
 ============================================================
 */
