@@ -72,7 +72,7 @@ void importTrainFiles() {
 	tmp = fscanf(fin, "%ld", &relationTotal);
     
 	printf("The total of relations is %ld.\n", relationTotal);
-    rel2id.size = 30; /* how many keyValues we will have */
+    rel2id.size = 10; /* how many keyValues we will have */
 
     rel2id.keyValue = (_keyValue *)malloc(sizeof(_keyValue) * rel2id.size);   // create storage big enough for 30 _keyValue structs
                                                     

@@ -7,7 +7,7 @@ from data import TrainDataLoader, TestDataLoader
 # dataloader for training
 train_dataloader = TrainDataLoader(
 	in_path = "./benchmarks/FB13/", 
-	nbatches = 50,
+	nbatches = 100,
 	threads = 8, 
 	sampling_mode = "normal", 
 	bern_flag = 1, 
@@ -37,7 +37,7 @@ print(train_dataloader.get_batch_size())
 # train the model
 trainer = Trainer(model = model, data_loader = train_dataloader, alpha = 0.5, use_gpu = False, checkpoint_dir="./checkpoint/",opt_method = "adagrad")
 trainer.run()
-print('dene2')
+
 quantE.save_checkpoint('./checkpoint/quantE.ckpt')
 
 # test the model
