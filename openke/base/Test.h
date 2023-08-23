@@ -436,11 +436,11 @@ void getTestBatch(INT *ph, INT *pt, INT *pr, INT *nh, INT *nt, INT *nr) {
     }
     free(negTestList);
 
-    for(int i=0;i<10;++i){
-        free(rel2id.keyValue[i].key);
-        free(rel2id.keyValue[i].value);
-    }
-    free(rel2id.keyValue);
+    for (int i = 0; i < rel2id.size; ++i) {
+     delete rel2id.keyValue[i].key;
+     delete rel2id.keyValue[i].value;
+ }
+    delete[] rel2id.keyValue;
     
 }
 #endif

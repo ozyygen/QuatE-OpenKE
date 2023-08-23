@@ -81,29 +81,30 @@ void importTrainFiles() {
      
     char line[256]; // Buffer to read each line from the file
     long prntbr, prntrel,relId;
-    INT count = 0;
+    int count = 0;
     string relName,tabSeparatedLine;
     long *ptr;
     std::string *ptrToString;
     size_t tabPos;
     while (fgets(line, sizeof(line), fin)) {
-        //only for unique relations we need rel2id
+        
       
         tabSeparatedLine = line;
         tabPos = tabSeparatedLine.find('\t');
        
             relName = tabSeparatedLine.substr(0, tabPos);
-            ptrToString = &relName; 
+            ptrToString = new std::string(relName); // Allocate new memory for the string
+
             
-            relId = stol(tabSeparatedLine.substr(tabPos, tabSeparatedLine.length()));
-            
-            ptr = &relId;
-            
-            rel2id.keyValue[count].key = (string *)malloc(sizeof(char) * key_size);
-            rel2id.keyValue[count].key = ptrToString;
-            rel2id.keyValue[count].value = (long *)malloc(sizeof(char) * value_size);
+            relId = stol(tabSeparatedLine.substr(tabPos + 1, tabSeparatedLine.length())); // +1 to skip the tab character
+            ptr = new long(relId); // Allocate new memory for the long
+
+            rel2id.keyValue[count].key = ptrToString; // Assign the pointers
             rel2id.keyValue[count].value = ptr;
-            count +=1;
+            count = count + 1;
+
+            printf("%s", rel2id.keyValue[0].key->c_str());
+
             
            
         
