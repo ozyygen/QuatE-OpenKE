@@ -14,10 +14,11 @@ class TrainDataSampler(object):
 		return self
 
 	def __next__(self):
-		print(f'batch:{self.batch}')
+		
 		self.batch += 1 
 		if self.batch > self.nbatches:
 			raise StopIteration()
+		
 		return self.datasampler()
 
 	def __len__(self):
@@ -96,7 +97,7 @@ class TrainDataLoader(object):
 		if self.nbatches == None:
 			self.nbatches = self.tripleTotal // self.batch_size
 		self.batch_seq_size = self.batch_size * (1 + self.negative_ent + self.negative_rel)
-
+		
 		self.batch_h = np.zeros(self.batch_seq_size, dtype=np.int64)
 		self.batch_t = np.zeros(self.batch_seq_size, dtype=np.int64)
 		self.batch_r = np.zeros(self.batch_seq_size, dtype=np.int64)

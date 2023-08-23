@@ -37,7 +37,7 @@ print(train_dataloader.get_batch_size())
 # train the model
 trainer = Trainer(model = model, data_loader = train_dataloader, alpha = 0.5, use_gpu = False, checkpoint_dir="./checkpoint/",opt_method = "adagrad")
 trainer.run()
-
+print('burda')
 quantE.save_checkpoint('./checkpoint/quantE.ckpt')
 
 # test the model
