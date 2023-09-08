@@ -115,6 +115,7 @@ def convert_triples_to_id_files(entity_to_id, relation_to_id,df,text_df):
             object_id = entity_to_id[row['o']]
             triples_file.write(f"{subject_id}\t{object_id}\t{relation_id}\n")
 
+
 #for inferring TPR-followed implicit true positives
 #L0 and L1 levels of hiearchy manually constracted 
 #we are considering these levels noise-free
