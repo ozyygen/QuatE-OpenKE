@@ -144,8 +144,9 @@ void importTrainFiles() {
 		tmp = fscanf(fin, "%ld", &trainList[i].t);
 		tmp = fscanf(fin, "%ld", &trainList[i].r);
         loc = trainList[i].r;
+        printf("burda2");
         trainList[i].r_str = relIdToString.at(loc);
-         
+        printf("burda3");
         //printf(" value%d",loc);
     }
 	fclose(fin);
