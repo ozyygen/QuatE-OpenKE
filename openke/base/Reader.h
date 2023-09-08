@@ -144,9 +144,9 @@ void importTrainFiles() {
 		tmp = fscanf(fin, "%ld", &trainList[i].t);
 		tmp = fscanf(fin, "%ld", &trainList[i].r);
         loc = trainList[i].r;
-        printf("burda2");
+        
         trainList[i].r_str = relIdToString.at(loc);
-        printf("burda3");
+       
         //printf(" value%d",loc);
     }
 	fclose(fin);
@@ -164,10 +164,13 @@ void importTrainFiles() {
 			freqEnt[trainList[i].h]++;
 			freqRel[trainList[i].r]++;
 		}
-
+    printf("burda1");
 	std::sort(trainHead, trainHead + trainTotal, Triple::cmp_head);
+    printf("burda2");
 	std::sort(trainTail, trainTail + trainTotal, Triple::cmp_tail);
+    printf("burda3");
 	std::sort(trainRel, trainRel + trainTotal, Triple::cmp_rel);
+    printf("burda4");
 	printf("The total of train triples is %ld.\n", trainTotal);
 
 	lefHead = (INT *)calloc(entityTotal, sizeof(INT));
