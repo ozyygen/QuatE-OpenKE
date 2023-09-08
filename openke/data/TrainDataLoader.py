@@ -223,7 +223,7 @@ class TrainDataLoader(object):
 		return self.tripleTotal
 
 	def __iter__(self):
-		print('heho')
+		
 		if self.sampling_mode == "normal":
 			return TrainDataSampler(self.nbatches, self.sampling)
 		else:

@@ -6,34 +6,43 @@
 
 INT find_id(string r){
 	INT count = 0, flag = 0;
-	INT id;
-	while (count != -1)
+	INT id = -1; // Initialize id with a default value
+	while (count < rel2id.size)
 	{
 		string *ptrToString = rel2id.keyValue[count].key;
 		string actualString = *ptrToString;
-
-		if (flag == 0 && actualString == r)
+		
+		if (actualString.c_str() == r)
 		{
+			
 			long *ptrToLong = rel2id.keyValue[count].value;
 			long actualLong = *ptrToLong;
 			id = actualLong;
 			flag = 1;
+			
+			break; // Exit the loop since the desired key is found
 		}
-		if(flag==1)
-			count = -1;
+		count++;
 	}
 	return id;
 }
 
-INT corrupt_head(INT id, INT h, INT r,INT t, bool filter_flag = true) {
+
+INT corrupt_head(INT id, INT h, INT r,INT t, INT st_id, bool filter_flag = true) {
 	INT lef, rig, mid, ll, rr;
 	INT rel_id, brod_id;
-
+	
 	rel_id = find_id("http://www.w3.org/2004/02/skos/core#related");
 	brod_id = find_id("http://www.w3.org/2004/02/skos/core#broader");
 	
-    if (r == rel_id || r == brod_id ) { 
-        return t;
+	
+    if (st_id == rel_id )
+	{
+		
+		return t;
+	}
+	else if( st_id == brod_id ) { 
+        return h;
     }
   
     else{
@@ -75,16 +84,23 @@ INT corrupt_head(INT id, INT h, INT r,INT t, bool filter_flag = true) {
 }
 }
 
-INT corrupt_tail(INT id, INT t, INT r, INT h, bool filter_flag = true) {
+INT corrupt_tail(INT id, INT t, INT r, INT h,INT st_id, bool filter_flag = true) {
 	INT lef, rig, mid, ll, rr;
 	INT rel_id, brod_id;
 
 	rel_id = find_id("http://www.w3.org/2004/02/skos/core#related");
 	brod_id = find_id("http://www.w3.org/2004/02/skos/core#broader");
 	
-    if (r == rel_id  || r == brod_id) { 
-        return h;
+    if (st_id == rel_id )
+	{
+		
+		return h;
+	}
+	else if( st_id == brod_id ) { 
+		
+        return t;
     }
+  
     else{
 	if (not filter_flag) {
 		INT tmp = rand_max(id, entityTotal - 1);
@@ -125,19 +141,21 @@ INT corrupt_tail(INT id, INT t, INT r, INT h, bool filter_flag = true) {
 }
 
 
-INT corrupt_rel(INT id, INT h, INT t, INT r, bool p = false, bool filter_flag = true) {
+INT corrupt_rel(INT id, INT h, INT t, INT r, INT st_id, bool p = false, bool filter_flag = true) {
 	INT lef, rig, mid, ll, rr, r_new;
 	INT rel_id, brod_id;
 
 	rel_id = find_id("http://www.w3.org/2004/02/skos/core#related");
 	brod_id = find_id("http://www.w3.org/2004/02/skos/core#broader");
 	
-	if (r == rel_id ){
+	if (st_id == rel_id ){
         r_new = brod_id;
+		
         return r_new;
     } 
-    else if (r == brod_id) { 
+    else if (st_id == brod_id) { 
         r_new = rel_id;
+		
         return r_new;
     }
     else{
@@ -202,8 +220,8 @@ INT corrupt_rel(INT id, INT h, INT t, INT r, bool p = false, bool filter_flag = 
 				rig = mid;
 		}
 		tmp = rig;
-		free(prob_tmp);
-		free(record);
+		std::free(prob_tmp);
+		std::free(record);
 	}
 	if (tmp < trainRel[ll].r) return tmp;
 	if (tmp > trainRel[rr].r - rr + ll - 1) return tmp + rr - ll + 1;

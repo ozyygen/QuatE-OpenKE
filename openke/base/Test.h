@@ -403,23 +403,40 @@ void getNegTest() {
 	rel_id = find_id("http://www.w3.org/2004/02/skos/core#related");
 	brod_id = find_id("http://www.w3.org/2004/02/skos/core#broader");
 	
-	INT r;
+	string r_s;
+	INT r,cur_rel_id;
     if (negTestList == NULL)
         negTestList = (Triple *)calloc(testTotal, sizeof(Triple));
     for (INT i = 0; i < testTotal; i++) {
         r = testList[i].r;
-        if (r == rel_id || r == brod_id ) {
-            negTestList[i].t = corrupt_head(0, testList[i].h, testList[i].r,testList[i].t);
-            negTestList[i].h = corrupt_tail(0, testList[i].t, testList[i].r,testList[i].h);
-            negTestList[i].r = corrupt_rel(0, testList[i].h, testList[i].t,testList[i].r);
+        r_s = trainList[i].r_str;
+			
+	    cur_rel_id = find_id(r_s);
+        if (cur_rel_id == rel_id ) {
+            
+            negTestList[i].t = corrupt_head(0, testList[i].h, testList[i].r,testList[i].t,cur_rel_id);
+           
+            negTestList[i].h = corrupt_tail(0, testList[i].t, testList[i].r,testList[i].h,cur_rel_id);
+            
+            negTestList[i].r = corrupt_rel(0, testList[i].h, testList[i].t,testList[i].r,cur_rel_id);
+    
+        }
+        else if (cur_rel_id == brod_id )
+        {
+            
+            negTestList[i].t = corrupt_head(0, testList[i].h, testList[i].r,testList[i].t,cur_rel_id);
+            
+            negTestList[i].h = corrupt_tail(0, testList[i].t, testList[i].r,testList[i].h,cur_rel_id);
+           
+            negTestList[i].r = corrupt_rel(0, testList[i].h, testList[i].t,testList[i].r,cur_rel_id);
     
         }
         else{
         negTestList[i] = testList[i];
         if (randd(0) % 1000 < 500)
-            negTestList[i].t = corrupt_head(0, testList[i].h, testList[i].r,testList[i].t);
+            negTestList[i].t = corrupt_head(0, testList[i].h, testList[i].r,testList[i].t,-1);
         else
-            negTestList[i].h = corrupt_tail(0, testList[i].t, testList[i].r,testList[i].h);
+            negTestList[i].h = corrupt_tail(0, testList[i].t, testList[i].r,testList[i].h,-1);
     }}
 }
 

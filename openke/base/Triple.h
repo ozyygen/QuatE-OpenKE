@@ -3,7 +3,7 @@
 #include "Setting.h"
 
 struct Triple {
-
+	std::string h_str, t_str,r_str;
 	INT h, r, t;
 
 	static bool cmp_head(const Triple &a, const Triple &b) {

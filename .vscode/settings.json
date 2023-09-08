@@ -4,6 +4,7 @@
         "functional": "cpp",
         "unordered_map": "cpp",
         "vector": "cpp",
-        "string": "cpp"
+        "string": "cpp",
+        "__node_handle": "cpp"
     }
 }

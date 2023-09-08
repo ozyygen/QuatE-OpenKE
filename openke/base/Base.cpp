@@ -110,20 +110,41 @@ void* getBatch(void* con) {
 			batch_r[batch] = trainList[i].r;
 			batch_y[batch] = 1;
 			INT last = batchSize;
-			INT rel_id, brod_id;
-
+			INT rel_id, brod_id,cur_rel_id;
+			
 			rel_id = find_id("http://www.w3.org/2004/02/skos/core#related");
+			
 			brod_id = find_id("http://www.w3.org/2004/02/skos/core#broader");
-	
-			INT r;
-			r = trainList[i].r;
+			
+			
+			string r;
+			r = trainList[i].r_str;//sorun bu atamada, trainlIST'DEN farkli deger geliyo
+			
+			cur_rel_id = find_id(r);
+			
 			for (INT times = 0; times < negRate; times ++) {
-				if (r == rel_id || r == brod_id ) {
-            		negTestList[i].t = corrupt_head(0, testList[i].h, testList[i].r,testList[i].t);
-            		negTestList[i].h = corrupt_tail(0, testList[i].t, testList[i].r,testList[i].h);
-            		negTestList[i].r = corrupt_rel(0, testList[i].h, testList[i].t,testList[i].r);
-    
+				
+				
+				if (cur_rel_id == rel_id ) {
+					
+            		batch_h[batch + last] = corrupt_head(0, trainList[i].h, trainList[i].r,trainList[i].t,cur_rel_id);
+            		
+					batch_t[batch + last] = corrupt_tail(0, trainList[i].t, trainList[i].r,trainList[i].h,cur_rel_id);
+            		
+					batch_r[batch + last]= corrupt_rel(0, trainList[i].h, trainList[i].t,trainList[i].r,cur_rel_id);
+					
+					
         		}
+				else if ( cur_rel_id == brod_id ){
+					
+					batch_h[batch + last] = corrupt_head(0, trainList[i].h, trainList[i].r,trainList[i].t,cur_rel_id);
+            		
+					batch_t[batch + last]= corrupt_tail(0, trainList[i].t, trainList[i].r,trainList[i].h,cur_rel_id);
+            		
+					batch_r[batch + last] = corrupt_rel(0, trainList[i].h, trainList[i].t,trainList[i].r,cur_rel_id);
+					
+					
+				}
         		else{
 					if (mode == 0){
 						if (bernFlag)
@@ -131,10 +152,10 @@ void* getBatch(void* con) {
 					
 						if (randd(id) % 1000 < prob) {
 							batch_h[batch + last] = trainList[i].h;
-							batch_t[batch + last] = corrupt_head(id, trainList[i].h, trainList[i].r,trainList[i].t);
+							batch_t[batch + last] = corrupt_head(id, trainList[i].h, trainList[i].r,trainList[i].t,-1);
 							batch_r[batch + last] = trainList[i].r;
 						} else {
-							batch_h[batch + last] = corrupt_tail(id, trainList[i].t, trainList[i].r,trainList[i].h);
+							batch_h[batch + last] = corrupt_tail(id, trainList[i].t, trainList[i].r,trainList[i].h,-1);
 							batch_t[batch + last] = trainList[i].t;
 							batch_r[batch + last] = trainList[i].r;
 						}
@@ -142,12 +163,12 @@ void* getBatch(void* con) {
 						last += batchSize;
 					} else {
 						if(mode == -1){
-							batch_h[batch + last] = corrupt_tail(id, trainList[i].t, trainList[i].r,trainList[i].h);
+							batch_h[batch + last] = corrupt_tail(id, trainList[i].t, trainList[i].r,trainList[i].h,-1);
 							batch_t[batch + last] = trainList[i].t;
 							batch_r[batch + last] = trainList[i].r;
 						} else {
 							batch_h[batch + last] = trainList[i].h;
-							batch_t[batch + last] = corrupt_head(id, trainList[i].h, trainList[i].r,trainList[i].t);
+							batch_t[batch + last] = corrupt_head(id, trainList[i].h, trainList[i].r,trainList[i].t,-1);
 							batch_r[batch + last] = trainList[i].r;
 						}
 						batch_y[batch + last] = -1;
@@ -211,8 +232,8 @@ void sampling(
 	for (INT threads = 0; threads < workThreads; threads++)
 		pthread_join(pt[threads], NULL);
 
-	free(pt);
-	free(para);
+	std::free(pt);
+	std::free(para);
 }
 
 int main() {

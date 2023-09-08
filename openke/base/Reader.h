@@ -8,11 +8,13 @@
 #include <cmath>
 #include <string.h>  /* for strcpy, as you cannot directly assign strings to a malloc'd pointer */
 #include <stdlib.h> 
+#include <unordered_map>
+#include <iostream>
 
 using namespace std;
+unordered_map<long, string> entIdToString;
+unordered_map<long, string> relIdToString;
 
-
- 
 INT *freqRel, *freqEnt;
 INT *lefHead, *rigHead;
 INT *lefTail, *rigTail;
@@ -31,7 +33,7 @@ INT *validLef, *validRig;
 extern "C"
 void importProb(REAL temp){
     if (prob != NULL)
-        free(prob);
+        std::free(prob);
     FILE *fin;
     fin = fopen((inPath + "kl_prob.txt").c_str(), "r");
     printf("Current temperature:%f\n", temp);
@@ -72,6 +74,8 @@ void importTrainFiles() {
 	tmp = fscanf(fin, "%ld", &relationTotal);
     
 	printf("The total of relations is %ld.\n", relationTotal);
+
+
     rel2id.size = 10; /* how many keyValues we will have */
     
     rel2id.keyValue = (_keyValue *)malloc(sizeof(_keyValue) * rel2id.size);   // create storage big enough for 30 _keyValue structs
@@ -81,11 +85,12 @@ void importTrainFiles() {
      
     char line[256]; // Buffer to read each line from the file
     long prntbr, prntrel,relId;
-    int count = 0;
-    string relName,tabSeparatedLine;
+    
+    string relName,tabSeparatedLine,v_str;
     long *ptr;
     std::string *ptrToString;
     size_t tabPos;
+    int loc,count = 0;
     while (fgets(line, sizeof(line), fin)) {
         
       
@@ -99,11 +104,15 @@ void importTrainFiles() {
             relId = stol(tabSeparatedLine.substr(tabPos + 1, tabSeparatedLine.length())); // +1 to skip the tab character
             ptr = new long(relId); // Allocate new memory for the long
 
-            rel2id.keyValue[count].key = ptrToString; // Assign the pointers
-            rel2id.keyValue[count].value = ptr;
-            count = count + 1;
+            rel2id.keyValue[relId].key = ptrToString; // Assign the pointers
+            rel2id.keyValue[relId].value = ptr;
 
-            printf("%s", rel2id.keyValue[0].key->c_str());
+           relIdToString.insert(std::make_pair(relId,relName));
+           
+            
+            
+
+            
 
             
            
@@ -134,7 +143,11 @@ void importTrainFiles() {
 		tmp = fscanf(fin, "%ld", &trainList[i].h);
 		tmp = fscanf(fin, "%ld", &trainList[i].t);
 		tmp = fscanf(fin, "%ld", &trainList[i].r);
-	}
+        loc = trainList[i].r;
+        trainList[i].r_str = relIdToString.at(loc);
+         
+        //printf(" value%d",loc);
+    }
 	fclose(fin);
 	std::sort(trainList, trainList + trainTotal, Triple::cmp_head);
 	tmp = trainTotal; trainTotal = 1;
@@ -213,7 +226,7 @@ Triple *tripleList;
 extern "C"
 void importTestFiles() {
     FILE *fin;
-    INT tmp;
+    INT tmp,loc;
     
     if (rel_file == "")
 	    fin = fopen((inPath + "relation2id.txt").c_str(), "r");
@@ -254,6 +267,11 @@ void importTestFiles() {
         tmp = fscanf(f_kb1, "%ld", &testList[i].t);
         tmp = fscanf(f_kb1, "%ld", &testList[i].r);
         tripleList[i] = testList[i];
+
+        loc = testList[i].r;
+        
+        testList[i].r_str = relIdToString.at(loc);
+        
     }
     for (INT i = 0; i < trainTotal; i++) {
         tmp = fscanf(f_kb2, "%ld", &tripleList[i + testTotal].h);

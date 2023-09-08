@@ -92,7 +92,7 @@ class Trainer(object):
 		try:
 			for epoch in training_range:
 				res = 0.0
-				print('dene1')
+				
 				for data in self.data_loader:
 					print('dene2')
 					loss = self.train_one_step(data)
@@ -100,7 +100,7 @@ class Trainer(object):
 					res += loss
 					print('dene4')
 				training_range.set_description("Epoch %d | loss: %f" % (epoch, res))
-				print('dene')
+			
 				if self.save_steps and self.checkpoint_dir and (epoch + 1) % self.save_steps == 0:
 					print("Epoch %d has finished, saving..." % (epoch))
 					self.model.save_checkpoint(os.path.join(self.checkpoint_dir + "-" + str(epoch) + ".ckpt"))

@@ -20,6 +20,7 @@ typedef struct _keyValue
 {
     std::string *key;
     long *value;
+	long *tr_lst;
 } _keyValue;
 
 extern "C"
