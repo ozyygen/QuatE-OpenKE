@@ -149,8 +149,11 @@ void importTrainFiles() {
        
         //printf(" value%d",loc);
     }
+    printf("burda");
 	fclose(fin);
+    printf("burda0");
 	std::sort(trainList, trainList + trainTotal, Triple::cmp_head);
+    printf("burda10");
 	tmp = trainTotal; trainTotal = 1;
 	trainHead[0] = trainTail[0] = trainRel[0] = trainList[0];
 	freqEnt[trainList[0].t] += 1;
