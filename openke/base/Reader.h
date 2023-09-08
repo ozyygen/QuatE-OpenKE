@@ -143,10 +143,11 @@ void importTrainFiles() {
 		tmp = fscanf(fin, "%ld", &trainList[i].h);
 		tmp = fscanf(fin, "%ld", &trainList[i].t);
 		tmp = fscanf(fin, "%ld", &trainList[i].r);
+        printf("x");
         loc = trainList[i].r;
-        
+        printf("a");
         trainList[i].r_str = relIdToString.at(loc);
-       
+       printf("b");
         //printf(" value%d",loc);
     }
     printf("burda");
