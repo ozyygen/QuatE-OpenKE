@@ -35,12 +35,12 @@ model = NegativeSampling(
 )
 print(train_dataloader.get_batch_size())
 # train the model
-trainer = Trainer(model = model, data_loader = train_dataloader, alpha = 0.5, use_gpu = False, checkpoint_dir="./checkpoint/",opt_method = "adagrad",train_times = 500)
+trainer = Trainer(model = model, data_loader = train_dataloader, alpha = 0.5, use_gpu = True, checkpoint_dir="./checkpoint/",opt_method = "adagrad",train_times = 500)
 trainer.run()
-print('burda')
+
 quantE.save_checkpoint('./checkpoint/quantE.ckpt')
 
 # test the model
 quantE.load_checkpoint('./checkpoint/quantE.ckpt')
-tester = Tester(model = quantE, data_loader = test_dataloader, use_gpu = False)
+tester = Tester(model = quantE, data_loader = test_dataloader, use_gpu = True)
 tester.run_link_prediction(type_constrain = False)

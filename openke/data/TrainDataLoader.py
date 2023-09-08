@@ -121,7 +121,7 @@ class TrainDataLoader(object):
 			0,
 			0
 		)
-		print('sampling')
+		
 		return {
 			"batch_h": self.batch_h, 
 			"batch_t": self.batch_t, 

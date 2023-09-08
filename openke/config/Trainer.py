@@ -94,11 +94,11 @@ class Trainer(object):
 				res = 0.0
 				
 				for data in self.data_loader:
-					print('dene2')
+					
 					loss = self.train_one_step(data)
-					print('dene3')
+					
 					res += loss
-					print('dene4')
+					
 				training_range.set_description("Epoch %d | loss: %f" % (epoch, res))
 			
 				if self.save_steps and self.checkpoint_dir and (epoch + 1) % self.save_steps == 0:
