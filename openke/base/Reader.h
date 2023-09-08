@@ -78,7 +78,7 @@ void importTrainFiles() {
 
     rel2id.size = 10; /* how many keyValues we will have */
     
-    rel2id.keyValue = (_keyValue *)malloc(sizeof(_keyValue) * rel2id.size);   // create storage big enough for 30 _keyValue structs
+    rel2id.keyValue = (_keyValue *)malloc(sizeof(_keyValue) * rel2id.size);   // create storage big enough for 10 _keyValue structs
                                                  
                                                     
     tmp = fscanf(fin, "%ld", &relationTotal);
@@ -139,6 +139,7 @@ void importTrainFiles() {
 	trainRel = (Triple *)calloc(trainTotal, sizeof(Triple));
 	freqRel = (INT *)calloc(relationTotal, sizeof(INT));
 	freqEnt = (INT *)calloc(entityTotal, sizeof(INT));
+    int count = 0;
 	for (INT i = 0; i < trainTotal; i++) {
 		tmp = fscanf(fin, "%ld", &trainList[i].h);
 		tmp = fscanf(fin, "%ld", &trainList[i].t);
@@ -147,7 +148,8 @@ void importTrainFiles() {
         loc = trainList[i].r;
         
         trainList[i].r_str = relIdToString.at(loc);
-        printf("trainList[i].r_str=%s",trainList[i].r_str.c_str());
+        count = count +1 ;
+        printf(" count= %d ",count);
       
     }
     printf("burda");

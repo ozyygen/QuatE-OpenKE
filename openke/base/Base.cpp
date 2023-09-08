@@ -118,7 +118,7 @@ void* getBatch(void* con) {
 			
 			
 			string r;
-			r = trainList[i].r_str;//sorun bu atamada, trainlIST'DEN farkli deger geliyo
+			r = trainList[i].r_str;
 			
 			cur_rel_id = find_id(r);
 			
