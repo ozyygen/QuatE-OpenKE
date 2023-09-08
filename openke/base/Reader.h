@@ -147,6 +147,7 @@ void importTrainFiles() {
         loc = trainList[i].r;
         
         trainList[i].r_str = relIdToString.at(loc);
+        printf("trainList[i].r_str=%s",trainList[i].r_str.c_str());
       
     }
     printf("burda");
