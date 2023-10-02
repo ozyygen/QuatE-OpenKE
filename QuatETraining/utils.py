@@ -30,7 +30,7 @@ def has_hierarcy_associative_clash(df):
  
         if relation == related :
             
-            if df[(df['s'] == other_concept) & (df['p'] == broader ) & (df['o'] == concept)].shape[0] > 0:
+            if df[(df['s'] == concept) & (df['p'] == broader ) & (df['o'] == other_concept)].shape[0] > 0:
                 violating_triples.append((concept, relation, other_concept))
                 violating_triples.append((other_concept, broader, concept))
        
@@ -40,6 +40,7 @@ def has_hierarcy_associative_clash(df):
   
     else:
       print("Hiearchy is consistent in terms of hierarcical & associative links clashes")
+      updated_kg, negative_df = remove_and_update_kg(df,negative_df,violating_triples) 
 
     return updated_kg, negative_df 
 
